@@ -1,0 +1,7 @@
+- name: Add sudoers permissions for adm*
+  template:
+    src: admcontoso.j2
+    dest: /etc/sudoers.d/admcontoso
+    owner: root
+    group: root
+    mode: 644

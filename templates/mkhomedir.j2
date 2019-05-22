@@ -1,0 +1,7 @@
+#ansible configuration for {{ ansible_os_family }}
+Name: Home Directories
+Default: yes
+Priority: 128
+Session-Type: Additional
+Session:
+  required  pam_mkhomedir.so skel=/etc/skel umask=0077

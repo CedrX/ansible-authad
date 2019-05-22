@@ -1,0 +1,20 @@
+authad_kerb_packages:
+  - krb5-workstation
+  - openldap-clients
+
+authad_samba_packages:
+  - adcli
+  - samba
+  - samba-client
+  - samba-common
+  - samba-winbind
+  - samba-winbind-clients
+  - sssd-libwbclient
+
+authad_sssd_packages:
+  - sssd
+  - oddjob-mkhomedir
+  - authconfig
+
+smb_service_name: smb
+sssd_service_name: sssd

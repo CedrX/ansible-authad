@@ -1,0 +1,24 @@
+authad_kerb_packages:
+  - ldap-utils
+  - krb5-user
+  - libpam-krb5
+  - realmd
+
+authad_samba_packages:
+  - adcli
+  - samba
+  - samba-common
+  - samba-common-bin
+  - winbind
+  - libwbclient0
+
+authad_sssd_packages:
+  - oddjob
+  - oddjob-mkhomedir
+  - sssd
+  - sssd-tools
+  - libpam-sss
+  - libnss-sss
+
+smb_service_name: smbd
+sssd_service_name: sssd

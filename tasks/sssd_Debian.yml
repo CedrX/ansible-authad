@@ -1,0 +1,38 @@
+- name: Install SSSD and related
+  package: name={{ item }} state=present
+  with_items: '{{ authad_sssd_packages }}'
+  tags: install_package
+
+- name: set debconf for lipmam-runtime
+  debconf:
+    name: libpam-runtime
+    question: libpam-runtime/override
+    value: 'true'
+    vtype: select
+
+- name: set profiles for libpam-runtime
+  debconf:
+    name: libpam-runtime
+    question: libpam-runtime/profiles
+    value: "pwquality, krb5, unix, sss, mkhomedir, systemd"
+    vtype: multiselect
+
+- name: remove mkhomedir from /var/lib/pam/seen
+  lineinfile:
+    dest: /var/lib/pam/seen
+    regexp: '^mkhomedir'
+    state: absent
+
+
+# PAM module to auto-create home directories
+- name: mkhomedir
+  template:
+    dest: '/usr/share/pam-configs/mkhomedir'
+    src: 'mkhomedir.j2'
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+
+- name: trigger pam-auth-update
+  command: /bin/true
+  notify: pam-auth-update

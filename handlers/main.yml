@@ -1,0 +1,13 @@
+---
+- name: restart samba
+  service:
+    state=restarted
+    name={{ smb_service_name }}
+
+- name: restart sssd
+  service:
+    state=restarted
+    name={{ sssd_service_name }}
+
+- name: pam-auth-update
+  command: /usr/sbin/pam-auth-update --package

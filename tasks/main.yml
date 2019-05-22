@@ -1,0 +1,29 @@
+---
+# tasks file for authad
+- name: 'include vars for {{ ansible_os_family }} and derivatives'
+  include_vars: '{{ ansible_os_family }}.yml'
+
+- name: 'include misc tasks'
+  include_tasks: 0_misc.yml
+  tags: "misc_configure"
+
+- name: Include tasks to install and configure samba for AD
+  include_tasks: 1_samba.yml
+  tags: "samba_configure"
+
+- name: Include tasks to install and configure kerberos
+  include_tasks: 2_kerberos.yml
+  tags: "kerb_configure"
+
+- name: Join Domain
+  shell: "echo -n '{{ authad_password }}' | adcli join --stdin-password --domain={{ authad_realm }} --domain-ou={{ authad_server_ou }} --login-user={{ authad_username }} -S {{ authad_pdc }}"
+  args:
+    creates: /etc/krb5.keytab
+  tags: "joinad"
+
+
+- name: Include tasks to install and configure sssd daemon for AD auth
+  include_tasks: 3_sssd.yml
+
+- name: Include tasks to permit adm users to have nice rights
+  include_tasks: 4_sudoers.yml

@@ -1,0 +1,7 @@
+#ansible configuration for {{ ansible_os_family }}
+Name: User/Group login access
+Default: yes
+Priority: 128
+Account-Type: Additional
+Account:
+  required pam_access.so

@@ -1,0 +1,62 @@
+[sssd]
+config_file_version = 2
+domains = {{ authad_realm | lower }}
+services = nss, pam
+
+[domain/contoso.fr]
+# Uncomment if you need offline logins
+debug_level = 6
+cache_credentials = true
+account_cache_expiration = 7
+
+id_provider = ad
+auth_provider = ad
+access_provider = ad
+ldap_schema = ad
+
+# Uncomment if service discovery is not working
+# ad_server = server.contoso.fr
+
+# Uncomment if you want to use POSIX UIDs and GIDs set on the AD side
+ldap_id_mapping = true
+ldap_schema = ad
+
+# Uncomment if the trusted domains are not reachable
+ad_enabled_domains = {{ authad_realm | lower }}
+ad_hostname = {{ ansible_hostname.split('.')[0] }}.{{ authad_realm | lower }}
+
+# Comment out if the users have the shell and home dir set on the AD side
+default_shell = /bin/bash
+fallback_homedir = /home/%d/%u
+
+# Uncomment and adjust if the default principal SHORTNAME$@REALM is not available
+ldap_access_order = filter, expire
+ldap_account_expire_policy = ad
+ldap_access_filter = (|(memberOf=CN=dsi,DC=contoso,DC=fr)(memberOf=CN=ADM_SYSTEM,DC=contoso,DC=FR))
+ldap_user_gecos = displayName
+
+
+# Comment out if you prefer to use shortnames.
+use_fully_qualified_names = True
+
+dyndns_update = true
+dyndns_refresh_interval = 43200
+dyndns_update_ptr = false
+dyndns_ttl = 3600
+dyndns_iface = eth0
+
+enumerate=false
+
+# Uncomment if the child domain is reachable, but only using a specific DC
+# [domain/contoso.fr/child.example.com]
+# ad_server = dc.child.example.com
+
+[nss]
+debug_level = 2
+fallback_homedir = /home/%d/%u
+default_shell = /bin/bash
+filter_users = root,lightdm,ldap,named,avahi,haldaemon,dbus,radvd,tomcat,radiusd,news,mailman,nscd
+filter_groups = root
+
+[pam]
+

@@ -1,0 +1,30 @@
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ default_realm = {{ authad_realm }}
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ default_tgs_enctypes = rc4-hmac des3-hmac-sha1 arcfour-hmac des-hmac-sha1 des-cbc-md5 des-cbc-crc
+ default_tkt_enctypes = rc4-hmac des3-hmac-sha1 arcfour-hmac des-hmac-sha1 des-cbc-md5 des-cbc-crc
+ permitted_enctypes = rc4-hmac des3-hmac-sha1 arcfour-hmac des-hmac-sha1 des-cbc-md5 des-cbc-crc
+ udp_preference_limit = 1
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ rdns = false
+
+[realms]
+    {{ authad_realm }} = {
+        kdc = {{ authad_pdc }}
+        kdc = {{ authad_sdc }}
+        admin_server = {{ authad_pdc }}
+        default_domain = {{ authad_realm }}
+    }
+
+[domain_realm]
+ #.{{ ansible_hostname }} = {{ authad_realm }}
+ .{{ authad_realm | lower }} = {{ authad_realm }}
+ {{ authad_realm | lower }} = {{ authad_realm }}

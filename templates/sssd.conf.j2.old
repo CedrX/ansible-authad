@@ -1,0 +1,53 @@
+[domain/{{ authad_realm | lower }}]
+debug_level = 2
+id_provider = ad
+auth_provider = ad
+access_provider = ad
+chpass_provider = none
+
+#cache_credentials = true
+#account_cache_expiration = 7
+entry_cache_timeout = 14400
+krb5_canonicalize = false
+#krb5_kpasswd = {{ authad_pdc }}
+krb5_realm = {{ authad_realm }}
+#krb5_server = {{ authad_pdc }}
+
+ldap_disable_referrals = true
+ldap_force_upper_case_realm = true
+ldap_id_mapping = True
+
+ldap_sasl_authid = {{ ansible_hostname | upper }}$@{{ authad_realm }}
+ldap_sasl_mech = GSSAPI
+
+ldap_schema = ad
+ldap_search_base = {{ authad_ldap_base }}
+ad_server = {{ authad_pdc }}
+ad_backup_server = {{ authad_sdc }}
+ad_gpo_access_control=permissive
+
+access_provider = ldap
+ldap_access_order = filter, expire
+ldap_account_expire_policy = ad
+ldap_access_filter = {{ authad_access_filter }}
+ldap_user_gecos = displayName
+
+dyndns_update = false
+enumerate = False
+
+min_id = 200
+
+[sssd]
+services = nss, pam
+config_file_version = 2
+debug_level = 2
+domains = {{ authad_realm | lower }}
+
+[nss]
+debug_level = 2
+fallback_homedir = /home/%d/%u
+default_shell = /bin/bash
+filter_users = root
+filter_groups = root
+
+[pam]

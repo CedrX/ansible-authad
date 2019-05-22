@@ -1,0 +1,12 @@
+---
+# defaults file for authad
+authad_workgroup: "CONTOSO"
+authad_realm: "CONTOSO.FR"
+authad_pdc: "pdc.contoso.fr"
+authad_sdc: "sdc.contoso.fr"
+authad_ldap_base: "DC=contoso,DC=fr"
+authad_username: "administrateur"
+authad_password: "adpassword"
+authad_server_ou: "OU=ServeursUnix,DC=CONTOSO,DC=FR"
+authad_access_filter: "memberOf=CN=dsi,DC=contoso,DC=fr"
+admgrpad: 'adm_system'

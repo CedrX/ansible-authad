@@ -1,0 +1,17 @@
+- name: "Include sssd tasks for {{ ansible_os_family }}"
+  include_tasks: "sssd_{{ ansible_os_family }}.yml"
+
+- name: Configure SSSD to use AD for authentication
+  template: src=sssd.conf.j2 dest=/etc/sssd/sssd.conf
+            owner=root group=root mode=0600
+  notify: restart sssd
+
+- name: Ensure SSSD is started and enabled on boot
+  service: name=sssd state=started enabled=yes
+
+- name: Restart messagebus
+  service: name=messagebus state=restarted
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure oddjobd for mkhomedir is started and enabled on boot
+  service: name=oddjobd state=started enabled=yes
